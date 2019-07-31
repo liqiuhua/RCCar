@@ -106,19 +106,7 @@ void MemManage_Handler(void)
     /* USER CODE END W1_MemoryManagement_IRQn 0 */
   }
 }
-  extern TIM_HandleTypeDef htim6;
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)    
-{
-    
-}
-extern void  TIM3_IC_Callback(TIM_HandleTypeDef *htim);
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-    if(htim->Instance==TIM3)
-    {
-        TIM3_IC_Callback(htim);
-    }
-}
+
 /**
   * @brief This function handles Pre-fetch fault, memory access fault.
   */

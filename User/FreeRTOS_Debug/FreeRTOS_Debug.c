@@ -1,10 +1,9 @@
 
 #include "FreeRTOS_Debug.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f4xx.h"
 #include "ExceptionHandler.h"
 #include "stdio.h"
 static void FreeRTOSDebugInit(void);
-TIM_HandleTypeDef htim6;
 TaskHandle_t xHandleTaskSystemDebug = NULL;
 /* 被系统调用 */
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL;
@@ -13,7 +12,7 @@ void vSystemDebugStart(void *pvParameters)
 {
     FreeRTOSDebugInit();
     printf("vSystemDebugStart\n");
-    uint8_t pcWriteBuffer[1024];
+  //  uint8_t pcWriteBuffer[1024];
     while(1)
     {
 //        printf("=================================================\r\n");
@@ -31,28 +30,25 @@ void vSystemDebugStart(void *pvParameters)
 static void FreeRTOSDebugInit(void)
 {
     /*使用TIM6，定时50us*/ 
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;	
+    NVIC_InitTypeDef NVIC_InitStructure;	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6,ENABLE);      //使能TIM3时钟
+	  TIM_TimeBaseInitStructure.TIM_Period = 1600; 	     //自动重装载值
+	TIM_TimeBaseInitStructure.TIM_Prescaler=2;      //定时器分频
+	TIM_TimeBaseInitStructure.TIM_CounterMode=TIM_CounterMode_Up; //向上计数模式
+	TIM_TimeBaseInitStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
+	
+	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStructure);//初始化TIM3
+    TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE); //允许定时器3更新中断
+	
+	NVIC_InitStructure.NVIC_IRQChannel=TIM6_DAC_IRQn; //定时器3中断
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03;  //子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
     
-    TIM_MasterConfigTypeDef sMasterConfig={0};
-    htim6.Instance = TIM6;
-    htim6.Init.Prescaler=2;//时钟源是84MHz
-    htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim6.Init.Period = 1600;
-    htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+    TIM_Cmd(TIM6,ENABLE);
     
-    __HAL_RCC_TIM6_CLK_ENABLE();
-    HAL_NVIC_SetPriority(TIM6_DAC_IRQn,15,15); 
-    HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-    if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
-    {
-        Error_Handler();
-    }
-      sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-      sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-      if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
-      {
-        Error_Handler();
-      }
-       HAL_TIM_Base_Start_IT(&htim6);
 }
 /**
   * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
@@ -63,8 +59,7 @@ void TIM6_DAC_IRQHandler(void)
   //  printf("TIM6_DAC_IRQHandler\n");
   /* USER CODE END TIM6_DAC_IRQn 0 */
     ulHighFrequencyTimerTicks++;
-  HAL_TIM_IRQHandler(&htim6);
   /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
-
+TIM_ClearITPendingBit(TIM6,TIM_IT_Update);  //清除中断标志位
   /* USER CODE END TIM6_DAC_IRQn 1 */
 }

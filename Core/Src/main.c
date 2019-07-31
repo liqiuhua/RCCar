@@ -31,12 +31,7 @@
 
 #include "FreeRTOS_Debug.h"
 #include "RC.h"
-/* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart3;
 
-HCD_HandleTypeDef hhcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
 
@@ -48,7 +43,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
-static void MX_USB_OTG_FS_HCD_Init(void);
+
 static void BSP_Init(void);
 
 static void AppTaskCreate (void);
@@ -62,19 +57,8 @@ static TaskHandle_t xHandleTaskLED = NULL;
 int main(void)
 {
 
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
   /* Configure the system clock */
   SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
 
     
 /*
@@ -88,12 +72,13 @@ int main(void)
 */
 
 
-//__set_PRIMASK(1);
+__set_PRIMASK(1);
 
 
     BSP_Init();
 
-//    MX_GPIO_Init();
+//   MX_GPIO_Init();
+//   GPIO_SetBits(GPIOE,GPIO_Pin_0); 
 //    vRCStart(NULL);
     
   AppTaskCreate ();  
@@ -112,6 +97,7 @@ while(1){}
 static void BSP_Init(void)
 {
     MX_USART1_UART_Init();
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 }
 static void AppTaskCreate (void)
 {
@@ -159,10 +145,10 @@ static void vLEDStart(void *pvParameters)
     /* USER CODE END WHILE */
 		vTaskDelay(500);
 
-			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0,GPIO_PIN_RESET); 
+			GPIO_SetBits(GPIOE,GPIO_Pin_0); 
             
 		vTaskDelay(500);
-			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0,GPIO_PIN_SET);
+			GPIO_ResetBits(GPIOE,GPIO_Pin_0);
 
     /* USER CODE BEGIN 3 */
   }
@@ -176,46 +162,39 @@ static void vLEDStart(void *pvParameters)
   */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+	ErrorStatus HSEStartUpStatus;
+    
+	//SystemInit();             
+	RCC_DeInit();                 //复位RCC模块的寄存器,复位成缺省值
+	RCC_HSEConfig(RCC_HSE_ON);  //开启HSE时钟
+	HSEStartUpStatus = RCC_WaitForHSEStartUp(); //获取HSE启动状态
 
-  /** Configure the main internal regulator output voltage 
-  */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 336;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
-  {
-    Error_Handler();
-  }
+	if(HSEStartUpStatus == SUCCESS)               //如果HSE启动成功
+	{
+//		FLASH_PrefetchBufferCmd(ENABLE);          //开启FLASH的预取功能
+//		FLASH_SetLatency(FLASH_Latency_2);       //FLASH延迟2个周期（这里我也不明白，先用吧）
+		RCC_HCLKConfig(RCC_SYSCLK_Div1);         //配置HCLK,PCLK2,PCLK1,PLL
+		RCC_PCLK2Config(RCC_HCLK_Div1);
+		RCC_PCLK1Config(RCC_HCLK_Div2);
+        RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);            //配置系统时钟
+        RCC_PLLConfig(RCC_PLLSource_HSE,25,336,2,7);
+		//RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_1);
+		RCC_PLLCmd(ENABLE);                                        //启动PLL
+		while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY)==RESET)                        
+		{}                                                          //等待PLL启动完成
+		RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);            //配置系统时钟
+		while(RCC_GetSYSCLKSource() !=0x08)          
+		{} 
+	}
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG,ENABLE);
 }
 int fputc(int ch,FILE *f)
 {
-    uint8_t temp[1]={ch};
-    HAL_UART_Transmit(&huart1,temp,1,2);
-    return 0;
+	USART_SendData(USART1, (uint8_t) ch);
+	
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);	
+	
+	return (ch);
 }
 /**
   * @brief USART1 Initialization Function
@@ -224,18 +203,62 @@ int fputc(int ch,FILE *f)
   */
 static void MX_USART1_UART_Init(void)
 {
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  USART_InitTypeDef USART_InitStruct;
+  	NVIC_InitTypeDef NVIC_InitStructure;
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
+	
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE); //使能GPIOA时钟
+    
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_USART1);  //GPIOA9复用为USART1
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource10,GPIO_AF_USART1); //GPIOA10复用为USART1
+	//USART1端口配置
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10; //GPIOA9与GPIOA10
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;      //复用功能
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//速度50MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //推挽复用输出
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;   //上拉
+	GPIO_Init(GPIOA,&GPIO_InitStructure);          //初始化PA9，PA10
+	
+	
+
+
+  USART_DeInit(USART1);
+  /* 中断式半双工/全双工通信, 波特率最好不要超过1Mbps, 高速通信建议使用DMA方式 */
+  USART_InitStruct.USART_BaudRate = 115200; /* 实验波特率, 3.5Mbps */
+  USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+  USART_InitStruct.USART_Parity = USART_Parity_No;
+  USART_InitStruct.USART_StopBits = USART_StopBits_1;
+  USART_InitStruct.USART_WordLength = USART_WordLength_8b;
+  
+  USART_Init(USART1,&USART_InitStruct);
+  
+
+
+  /* Configure USART1 USART_IT_RXNE */
+  USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
+//USART_ITConfig(USART1,USART_IT_RXNE,DISABLE);
+//  USART_OverSampling8Cmd(USART1,ENABLE);
+//  USART_OverSampling8Cmd(USART6,ENABLE);
+  
+  /* Enable USART1 */
+  USART_Cmd(USART1, ENABLE); 
+
+  USART_ClearFlag(USART1, USART_FLAG_TC);
+	
+	
+	
+	
+	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+	
+  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);    
 }
 
 /**
@@ -245,18 +268,7 @@ static void MX_USART1_UART_Init(void)
   */
 static void MX_USART2_UART_Init(void)
 {
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
+
 
 }
 
@@ -267,37 +279,6 @@ static void MX_USART2_UART_Init(void)
   */
 static void MX_USART3_UART_Init(void)
 {
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-
-/**
-  * @brief USB_OTG_FS Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USB_OTG_FS_HCD_Init(void)
-{
-  hhcd_USB_OTG_FS.Instance = USB_OTG_FS;
-  hhcd_USB_OTG_FS.Init.Host_channels = 8;
-  hhcd_USB_OTG_FS.Init.speed = HCD_SPEED_FULL;
-  hhcd_USB_OTG_FS.Init.dma_enable = DISABLE;
-  hhcd_USB_OTG_FS.Init.phy_itface = HCD_PHY_EMBEDDED;
-  hhcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
-  if (HAL_HCD_Init(&hhcd_USB_OTG_FS) != HAL_OK)
-  {
-    Error_Handler();
-  }
 
 }
 
@@ -311,30 +292,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, LED1_Pin|LED2_Pin, GPIO_PIN_SET);
-
-
-  /*Configure GPIO pin : KEY_S4_Pin */
-  GPIO_InitStruct.Pin = KEY_S4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(KEY_S4_GPIO_Port, &GPIO_InitStruct);
-
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 
 
   /*Configure GPIO pins : LCD_CS_Pin LED1_Pin LED2_Pin */
-  GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_0;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOE, &GPIO_InitStruct);
 
 
 

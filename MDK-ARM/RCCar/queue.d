@@ -1,0 +1,15 @@
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\queue.c
+.\rccar\queue.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\rccar\queue.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
+.\rccar\queue.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\queue.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\queue.o: ..\User\FreeRTOSConfig.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\deprecated_definitions.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\portable\RVDS\ARM_CM4F\portmacro.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\mpu_wrappers.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\task.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\list.h
+.\rccar\queue.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\queue.h

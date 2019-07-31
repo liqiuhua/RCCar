@@ -1,30 +1,30 @@
 #include "TFTLCD.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f4xx.h"
 #include "stdio.h"
 #include "FONT.H"
 
 
-#define LCD_RD_Pin GPIO_PIN_8
+#define LCD_RD_Pin  GPIO_Pin_8
 #define LCD_RD_GPIO_Port GPIOE
-#define LCD_WR_Pin GPIO_PIN_9
+#define LCD_WR_Pin  GPIO_Pin_9
 #define LCD_WR_GPIO_Port GPIOE
-#define LCD_RS_Pin GPIO_PIN_10
+#define LCD_RS_Pin  GPIO_Pin_10
 #define LCD_RS_GPIO_Port GPIOE
-#define LCD_CS_Pin GPIO_PIN_11
+#define LCD_CS_Pin  GPIO_Pin_11
 #define LCD_CS_GPIO_Port GPIOE
-#define LCD_BL_Pin GPIO_PIN_10
+#define LCD_BL_Pin  GPIO_Pin_10
 #define LCD_BL_GPIO_Port GPIOD
 
 
-#define LCD_RD_SET() HAL_GPIO_WritePin(LCD_RD_GPIO_Port, LCD_RD_Pin,GPIO_PIN_SET)
-#define LCD_WR_SET() HAL_GPIO_WritePin(LCD_WR_GPIO_Port, LCD_WR_Pin,GPIO_PIN_SET)
-#define LCD_RS_SET() HAL_GPIO_WritePin(LCD_RS_GPIO_Port, LCD_RS_Pin,GPIO_PIN_SET)
-#define LCD_CS_SET() HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin,GPIO_PIN_SET)
+#define LCD_RD_SET() GPIO_SetBits(LCD_RD_GPIO_Port, LCD_RD_Pin)
+#define LCD_WR_SET() GPIO_SetBits(LCD_WR_GPIO_Port, LCD_WR_Pin)
+#define LCD_RS_SET() GPIO_SetBits(LCD_RS_GPIO_Port, LCD_RS_Pin)
+#define LCD_CS_SET() GPIO_SetBits(LCD_CS_GPIO_Port, LCD_CS_Pin)
 
-#define LCD_RD_RESET() HAL_GPIO_WritePin(LCD_RD_GPIO_Port, LCD_RD_Pin,GPIO_PIN_RESET)
-#define LCD_WR_RESET() HAL_GPIO_WritePin(LCD_WR_GPIO_Port, LCD_WR_Pin,GPIO_PIN_RESET)
-#define LCD_RS_RESET() HAL_GPIO_WritePin(LCD_RS_GPIO_Port, LCD_RS_Pin,GPIO_PIN_RESET)
-#define LCD_CS_RESET() HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin,GPIO_PIN_RESET)
+#define LCD_RD_RESET() GPIO_ResetBits(LCD_RD_GPIO_Port, LCD_RD_Pin)
+#define LCD_WR_RESET() GPIO_ResetBits(LCD_WR_GPIO_Port, LCD_WR_Pin)
+#define LCD_RS_RESET() GPIO_ResetBits(LCD_RS_GPIO_Port, LCD_RS_Pin)
+#define LCD_CS_RESET() GPIO_ResetBits(LCD_CS_GPIO_Port, LCD_CS_Pin)
 
 #define LCD_WRITE_16BIT(x)  GPIOB->ODR=(x)
 #define LCD_READ_16BIT() GPIOB->IDR
@@ -132,35 +132,33 @@ static void LCD_HardwareInit(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
     /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-    /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, LCD_RD_Pin|LCD_WR_Pin|LCD_RS_Pin
-                           |LCD_CS_Pin, GPIO_PIN_RESET);
-    /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LCD_BL_GPIO_Port, LCD_BL_Pin, GPIO_PIN_RESET);
-
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
     /*Configure GPIO pin : LCD_BL_Pin */
-  GPIO_InitStruct.Pin = LCD_BL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LCD_BL_GPIO_Port, &GPIO_InitStruct);  
+  GPIO_InitStruct.GPIO_Pin = LCD_BL_Pin;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(LCD_BL_GPIO_Port, &GPIO_InitStruct);  
   
     /*Configure GPIO pins : LCD_RD_Pin LCD_WR_Pin LCD_RS_Pin LCD_CS_Pin */
-  GPIO_InitStruct.Pin = LCD_RD_Pin|LCD_WR_Pin|LCD_RS_Pin|LCD_CS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  GPIO_InitStruct.GPIO_Pin = LCD_RD_Pin|LCD_WR_Pin|LCD_RS_Pin|LCD_CS_Pin;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOE, &GPIO_InitStruct);
 
     /*Configure GPIO pins : LCD_RD_Pin LCD_WR_Pin LCD_RS_Pin LCD_CS_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_All;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  GPIO_InitStruct.GPIO_Pin =  GPIO_Pin_All;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 static void LCD_Init(void)
@@ -280,7 +278,7 @@ static void LCD_Init(void)
 
 static void LCD_BlackLight(uint8_t status)
 {
-    HAL_GPIO_WritePin(LCD_BL_GPIO_Port, LCD_BL_Pin, status); 
+    GPIO_WriteBit(LCD_BL_GPIO_Port, LCD_BL_Pin, status); 
 }
 
 

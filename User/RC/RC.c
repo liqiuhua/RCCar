@@ -1,7 +1,7 @@
 #include "RC.h"
 #include "ExceptionHandler.h"
 #include "PWM.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f4xx.h"
 #include "stdio.h"
 
 static void KEYDeal(uint8_t KeyValue);
@@ -11,26 +11,26 @@ static void KEYDeal(uint8_t KeyValue);
 static void LCDPWM_INFODISPLAY(void);
 static void LCDPWM_INFO_LINE_DISPLAY(uint8_t line, uint32_t value);
 static uint32_t LCD_PWM_INFO[7];
-#define PWMOUT_ONE 0
-#define PWMOUT_TWO 1
-#define PWMINPUT_ONE 2
-#define PWMINPUT_TWO 3
-#define PWMINPUT_THREE 4
-#define PWMINPUT_FOUR 5
-#define SERVO_OUT 6
+#define PWMOUT_ONE      0
+#define PWMOUT_TWO      1
+#define PWMINPUT_ONE    2
+#define PWMINPUT_TWO    3
+#define PWMINPUT_THREE  4
+#define PWMINPUT_FOUR   5
+#define SERVO_OUT       6
 
 TaskHandle_t xHandleTaskRC=NULL;
 void vRCStart(void *pvParameters)
 {
     PWM_INPUT_Init();
-   PWM_OUTPUT_Init();
+    PWM_OUTPUT_Init();
     printf("vRCStart\n");
     while(1)
     {
-     //   vTaskDelay(500);
-       // HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1,GPIO_PIN_SET);
+       // vTaskDelay(500);
+       // GPIO_WriteBit(GPIOE,  GPIO_Pin_1, GPIO_Pin_SET);
       //  vTaskDelay(500);
-       // HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1,GPIO_PIN_RESET);
+        GPIO_WriteBit(GPIOE,  GPIO_Pin_1, Bit_RESET);
     }
     
 }
@@ -40,12 +40,11 @@ void vRCStart(void *pvParameters)
 void vInteractionStart(void *pvParameters)
 {
 
-
+    
     LCD.Init();
     printf("vLCDStart\n");
-    uint8_t Display[30]; 
     LCDPWM_INFODISPLAY();
-     KEY_Init();
+    KEY_Init();
     uint8_t key_value=0;
     while(1)
     {
@@ -53,41 +52,44 @@ void vInteractionStart(void *pvParameters)
         key_value=getKeyStatus();
         if(key_value!=0)
         {
-            //KEYDeal(key_value);
-            printf("KEY=%x",key_value);
-            
+            KEYDeal(key_value);
+            printf("KEY=%x \n",key_value);
             printf("get=%d\n",getTIM3ICValue(0));
             
             LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_ONE,getTIM3ICValue(0));
             LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_TWO,getTIM3ICValue(1));
+            LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_THREE,getTIM3ICValue(2));
+            LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_FOUR,getTIM3ICValue(3));
         }
 
 
     }
     
 }
+static uint16_t PWMOUTDATA=5000;
 static void KEYDeal(uint8_t KeyValue)
 {
     uint8_t Display[30]={0}; 
     if(KeyValue&KEY_UP_CLICK)
     {
-        snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_UP_CLICK");
+        PWM_out(0xff,(PWMOUTDATA+=100));
+        snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_UP_CLICK",PWMOUTDATA);
 
     }
     if(KeyValue&KEY_DOWN_CLICK)
     {
-        
-         snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_DOWN_CLICK");
+        PWM_out(0xff,(PWMOUTDATA-=100));
+         snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_DOWN_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_LEFT_CLICK)
     {
-        
-         snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_LEFT_CLICK");
+        PWM_out(0xff,(PWMOUTDATA+=500));
+         snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_LEFT_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_RIGHT_CLICK)
     {
-        
-        snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_RIGHT_CLICK");
+        PWM_out(0xff,(PWMOUTDATA-=500));
+        snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_RIGHT_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_ENTER_CLICK)
     {
@@ -96,11 +98,14 @@ static void KEYDeal(uint8_t KeyValue)
     }
     if(KeyValue&KEY_CANCEL_CLICK)
     {
-        
+        RCC_ClocksTypeDef get_rcc_clock; 
+        RCC_GetClocksFreq(&get_rcc_clock); 
+        printf("freq:  SYSCLK = %d ,HCLK = %d ,PCLK1 = %d ,PCLK2 = %d \n",get_rcc_clock.SYSCLK_Frequency,get_rcc_clock.HCLK_Frequency,get_rcc_clock.PCLK1_Frequency,get_rcc_clock.PCLK2_Frequency);
+       
         snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_CANCEL_CLICK");
     }
-    LCD.ClearLine(1);
-    LCD.ShowStringLine(1,0,Display);
+    LCD.ClearLine(9);
+    LCD.ShowStringLine(9,0,Display);
     
 }    
 
