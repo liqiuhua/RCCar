@@ -40,6 +40,7 @@ void vRCStart(void *pvParameters)
 #include "TFTLCD.h"
 #include "string.h"
 static uint16_t PWMOUTDATA=5000;
+static uint16_t ServoPWMOutData =0;
 static uint8_t UP_DOWN_FLAG=1;
 void vInteractionStart(void *pvParameters)
 {
@@ -74,6 +75,7 @@ void vInteractionStart(void *pvParameters)
             LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_FOUR,getTIM3ICValue(3));
             LCDPWM_INFO_LINE_DISPLAY(PWMOUT_ONE,getTIM4PWMValue(3));
             LCDPWM_INFO_LINE_DISPLAY(PWMOUT_TWO,getTIM4PWMValue(4));
+            LCDPWM_INFO_LINE_DISPLAY(SERVO_OUT,ServoPWMOutData);
         }
         if(UP_DOWN_FLAG)
         {
@@ -115,15 +117,26 @@ static void KEYDeal(uint8_t KeyValue)
     if(KeyValue&KEY_RIGHT_CLICK)
     {
         PWMOUTDATA-=500;
+        if(PWMOUTDATA<=100)
+        {
+            PWMOUTDATA=100;
+        }
         snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_RIGHT_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_ENTER_CLICK)
     {
-        
+        ServoPWMOutData+=100;
+        PWM_out(0x01,ServoPWMOutData);
          snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_ENTER_CLICK");
     }
     if(KeyValue&KEY_CANCEL_CLICK)
     {
+        ServoPWMOutData-=100;
+        if(ServoPWMOutData<=100)
+        {
+            ServoPWMOutData=100;
+        }
+        PWM_out(0x01,ServoPWMOutData);
         RCC_ClocksTypeDef get_rcc_clock; 
         RCC_GetClocksFreq(&get_rcc_clock); 
         printf("freq:  SYSCLK = %d ,HCLK = %d ,PCLK1 = %d ,PCLK2 = %d \n",get_rcc_clock.SYSCLK_Frequency,get_rcc_clock.HCLK_Frequency,get_rcc_clock.PCLK1_Frequency,get_rcc_clock.PCLK2_Frequency);
