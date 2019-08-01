@@ -3,6 +3,7 @@
 #include "PWM.h"
 #include "stm32f4xx.h"
 #include "stdio.h"
+#include "GUI.h"
 
 static void KEYDeal(uint8_t KeyValue);
 
@@ -10,6 +11,7 @@ static void KEYDeal(uint8_t KeyValue);
 
 static void LCDPWM_INFODISPLAY(void);
 static void LCDPWM_INFO_LINE_DISPLAY(uint8_t line, uint32_t value);
+static void LCD_ShowStringLine(uint16_t row,uint16_t column,uint8_t *p);
 static uint32_t LCD_PWM_INFO[7];
 #define PWMOUT_ONE      0
 #define PWMOUT_TWO      1
@@ -43,7 +45,15 @@ void vInteractionStart(void *pvParameters)
     
     LCD.Init();
     printf("vLCDStart\n");
-    LCDPWM_INFODISPLAY();
+    //LCDPWM_INFODISPLAY();
+    
+    GUI_Init();
+
+    GUI_SetBkColor(GUI_RED);
+    GUI_Clear();
+    //GUI_SetColor(GUI_BLUE);
+    GUI_SetFont(&GUI_Font16_ASCII);
+    GUI_DispStringAt("hello word !",5,5);
     KEY_Init();
     uint8_t key_value=0;
     while(1)
@@ -104,8 +114,8 @@ static void KEYDeal(uint8_t KeyValue)
        
         snprintf((char *)Display,30,"%s",(uint8_t *)"KEY_CANCEL_CLICK");
     }
-    LCD.ClearLine(9);
-    LCD.ShowStringLine(9,0,Display);
+
+    LCD_ShowStringLine(9,0,Display);
     
 }    
 
@@ -117,43 +127,42 @@ static void LCDPWM_INFO_LINE_DISPLAY(uint8_t line, uint32_t value)
         case (LCD_PWM_INFO_START_LINE+0):
             
             snprintf((char *)Display,30,"PWM1_Out= %d",value);
-            LCD.ClearLine((LCD_PWM_INFO_START_LINE+0));
-            LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+0),0,Display);
+
+            LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+0),0,Display);
         break;
         
         case (LCD_PWM_INFO_START_LINE+1):
             snprintf((char *)Display,30,"PWM2_Out= %d",value);
-            LCD.ClearLine((LCD_PWM_INFO_START_LINE+1));
-            LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+1),0,Display);
+
+            LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+1),0,Display);
         break;
         case (LCD_PWM_INFO_START_LINE+2):
         snprintf((char *)Display,30,"RC1_In= %d",value);
-        LCD.ClearLine((LCD_PWM_INFO_START_LINE+2));
-        LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+2),0,Display);
+
+        LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+2),0,Display);
         break;
 
         case (LCD_PWM_INFO_START_LINE+3):
         snprintf((char *)Display,30,"RC2_In= %d",value);
-        LCD.ClearLine((LCD_PWM_INFO_START_LINE+3));
-        LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+3),0,Display);
+
+        LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+3),0,Display);
         break;
 
         case (LCD_PWM_INFO_START_LINE+4):
         snprintf((char *)Display,30,"RC3_In= %d",value);
-        LCD.ClearLine((LCD_PWM_INFO_START_LINE+4));
-        LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+4),0,Display);
+
+        LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+4),0,Display);
         break;
 
         case (LCD_PWM_INFO_START_LINE+5):
         snprintf((char *)Display,30,"RC4_In= %d",value);
-        LCD.ClearLine((LCD_PWM_INFO_START_LINE+5));
-        LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+5),0,Display);
+        LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+5),0,Display);
         break;
 
         case (LCD_PWM_INFO_START_LINE+6):
         snprintf((char *)Display,30,"Servo Out= %d",value);
-        LCD.ClearLine((LCD_PWM_INFO_START_LINE+6));
-        LCD.ShowStringLine((LCD_PWM_INFO_START_LINE+6),0,Display);
+       // LCD.ClearLine((LCD_PWM_INFO_START_LINE+6));
+        LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+6),0,Display);
         break;
 
 //        case (LCD_PWM_INFO_START_LINE+7):
@@ -172,4 +181,9 @@ static void LCDPWM_INFODISPLAY(void)
     {
        LCDPWM_INFO_LINE_DISPLAY(i, LCD_PWM_INFO[i]);
     }
+}
+static void LCD_ShowStringLine(uint16_t row,uint16_t column,uint8_t *p)
+{        
+        GUI_DispStringAt("                                    ",5+8*column,5+16*row);
+        GUI_DispStringAt((const char *)p,5+8*column,5+16*row);
 }

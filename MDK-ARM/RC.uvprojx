@@ -334,9 +334,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F4XX</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F4XX,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;..\Drivers\STM32F4xx_StdPeriph_Driver\inc;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\User;..\FreeRTOSv10.2.1\FreeRTOS\Source\include;..\FreeRTOSv10.2.1\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\User\TFTLCD;..\User\FreeRTOS_Debug;..\User\RC</IncludePath>
+              <IncludePath>../Core/Inc;..\Drivers\STM32F4xx_StdPeriph_Driver\inc;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\User;..\FreeRTOSv10.2.1\FreeRTOS\Source\include;..\FreeRTOSv10.2.1\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\User\TFTLCD;..\User\FreeRTOS_Debug;..\User\RC;..\Drivers\CMSIS\DSP\Include;..\Drivers\STemWinLibrary532\Config;..\Drivers\STemWinLibrary532\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -413,7 +413,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
+          <GroupName>Drivers/STM32F4xx_STD_Driver</GroupName>
           <Files>
             <File>
               <FileName>misc.c</FileName>
@@ -573,6 +573,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Drivers/CMSIS/DSP</GroupName>
+          <Files>
+            <File>
+              <FileName>arm_cortexM4lf_math.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\Drivers\CMSIS\Lib\ARM\arm_cortexM4lf_math.lib</FilePath>
+            </File>
+            <File>
+              <FileName>arm_math.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Drivers\CMSIS\DSP\Include\arm_math.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Drivers/CMSIS</GroupName>
           <Files>
             <File>
@@ -587,14 +602,36 @@
         </Group>
         <Group>
           <GroupName>Mid/STemWinConfig</GroupName>
+          <Files>
+            <File>
+              <FileName>GUIConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STemWinLibrary532\Config\GUIConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDRV_Template.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STemWinLibrary532\Config\GUIDRV_Template.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf_FlexColor_Template.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STemWinLibrary532\Config\LCDConf_FlexColor_Template.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_X_FreeRTOS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STemWinLibrary532\OS\GUI_X_FreeRTOS.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Mid/STemWinLIb</GroupName>
           <Files>
             <File>
-              <FileName>STemWin532_CM4_Keil.lib</FileName>
+              <FileName>STemWin532_CM4_OS_Keil.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\Drivers\STemWinLibrary532\Lib\STemWin532_CM4_Keil.lib</FilePath>
+              <FilePath>..\Drivers\STemWinLibrary532\Lib\STemWin532_CM4_OS_Keil.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -665,6 +702,16 @@
               <FileName>TFTLCD.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\TFTLCD\TFTLCD.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_X_touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\TFTLCD\GUI_X_touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_X_touch.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\User\TFTLCD\GUI_X_touch.h</FilePath>
             </File>
           </Files>
         </Group>

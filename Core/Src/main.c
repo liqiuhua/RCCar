@@ -98,6 +98,7 @@ static void BSP_Init(void)
 {
     MX_USART1_UART_Init();
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC,ENABLE);
 }
 static void AppTaskCreate (void)
 {

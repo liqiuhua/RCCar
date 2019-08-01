@@ -52,6 +52,13 @@
 .\rccar\rc.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\rccar\rc.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\rccar\rc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI_ConfDefaults.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\Config\GUIConf.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI_Type.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\LCD.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\Global.h
+.\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI_Version.h
 .\rccar\rc.o: ..\User\KEY.h
 .\rccar\rc.o: ..\User\TFTLCD\TFTLCD.h
 .\rccar\rc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

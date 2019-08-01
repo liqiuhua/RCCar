@@ -92,8 +92,7 @@ static void LCD_Init(void);
 static void LCD_WriteReg(uint16_t LCD_Reg,uint16_t LCD_RegValue);
 static uint16_t LCD_ReadReg(uint16_t LCD_Reg);
 static uint16_t LCD_RD_DATA(void);
-static void LCD_WRITE_DATA(uint16_t data);
-static void LCD_WRITE_REG(uint16_t data);
+
 static void LCD_BlackLight(uint8_t status);
 static void LCD_Clear(uint16_t color);
 static void LCD_DisplayDir(uint8_t dir);
@@ -273,7 +272,7 @@ static void LCD_Init(void)
     }
     LCD_DisplayDir(0);
     LCD_BlackLight(1);
-    LCD_Clear(WHITE);
+    //LCD_Clear(RED);
 }
 
 static void LCD_BlackLight(uint8_t status)
@@ -537,6 +536,20 @@ static void LCD_Clear(uint16_t color)
     LCD_WriteRAM_Prepare();
     for(index=0;index<totalPoint;index++)LCD_WRITE_DATA(color);	
 }
+//从ILI93xx读出的数据为GBR格式，而我们写入的时候为RGB格式。
+//通过该函数转换
+//c:GBR格式的颜色值
+//返回值：RGB格式的颜色值
+uint16_t LCD_BGR2RGB(uint16_t c)
+{
+	uint16_t  r,g,b,rgb;   
+	b=(c>>0)&0x1f;
+	g=(c>>5)&0x3f;
+	r=(c>>11)&0x1f;	 
+	rgb=(b<<11)+(g<<5)+(r<<0);		 
+	return(rgb);
+} 
+
 //画点
 //x,y:坐标
 //POINT_COLOR:此点的颜色
@@ -566,8 +579,72 @@ void LCD_Fast_DrawPoint(uint16_t x,uint16_t y,uint16_t color)
  	LCD_CS_SET(); 
 	LCD_WRITE_DATA(color);		//写数据
 }
-
-
+//当mdk -O1时间优化时需要设置
+//延时i
+void opt_delay(u8 i)
+{
+	while(i--);
+}
+//读取个某点的颜色值	 
+//x,y:坐标
+//返回值:此点的颜色
+uint16_t LCD_ReadPoint(uint16_t x,uint16_t y)
+{
+ 	volatile unsigned int r=0,g=0,b=0;
+	if(x>=LCD.width||y>=LCD.height)return 0;	//超过了范围,直接返回		   
+	LCD_SetCursor(x,y);	    
+	if(LCD.id==0X9341||LCD.id==0X6804||LCD.id==0X5310||LCD.id==0X1963)LCD_WRITE_REG(0X2E);//9341/6804/3510/1963 发送读GRAM指令
+	else if(LCD.id==0X5510)LCD_WRITE_REG(0X2E00);	//5510 发送读GRAM指令
+	else LCD_WRITE_REG(0X22);      		 			//其他IC发送读GRAM指令
+	if(LCD.id==0X9320)opt_delay(2);				//FOR 9320,延时2us	    
+ 	r=LCD_RD_DATA();								//dummy Read	   
+	if(LCD.id==0X1963)return r;					//1963直接读就可以 
+	opt_delay(2);	  
+ 	r=LCD_RD_DATA();  		  						//实际坐标颜色
+ 	if(LCD.id==0X9341||LCD.id==0X5310||LCD.id==0X5510)		//9341/NT35310/NT35510要分2次读出
+ 	{
+		//opt_delay(2);	  
+		b=LCD_RD_DATA(); 
+		g=r&0XFF;		//对于9341/5310/5510,第一次读取的是RG的值,R在前,G在后,各占8位
+		g<<=8;
+	} 
+	if(LCD.id==0X9325||LCD.id==0X4535||LCD.id==0X4531||LCD.id==0XB505||LCD.id==0XC505)return r;	//这几种IC直接返回颜色值
+	else if(LCD.id==0X9341||LCD.id==0X5310||LCD.id==0X5510)return (((r>>11)<<11)|((g>>10)<<5)|(b>>11));//ILI9341/NT35310/NT35510需要公式转换一下
+	else return LCD_BGR2RGB(r);						//其他IC
+}
+//在指定区域内填充单个颜色
+//(sx,sy),(ex,ey):填充矩形对角坐标,区域大小为:(ex-sx+1)*(ey-sy+1)   
+//color:要填充的颜色
+void LCD_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint16_t color)
+{          
+	uint16_t i,j;
+	uint16_t xlen=0;
+	uint16_t temp;
+	if((LCD.id==0X6804)&&(LCD.dir==1))	//6804横屏的时候特殊处理  
+	{
+		temp=sx;
+		sx=sy;
+		sy=LCD.width-ex-1;	  
+		ex=ey;
+		ey=LCD.width-temp-1;
+ 		LCD.dir=0;	 
+ 		LCD.SetXPosCmd=0X2A;
+		LCD.SetYPosCmd=0X2B;  	 			
+		LCD_Fill(sx,sy,ex,ey,color);  
+ 		LCD.dir=1;	 
+  		LCD.SetXPosCmd=0X2B;
+		LCD.SetYPosCmd=0X2A;  	 
+ 	}else
+	{
+		xlen=ex-sx+1;	 
+		for(i=sy;i<=ey;i++)
+		{
+		 	LCD_SetCursor(sx,i);      				//设置光标位置 
+			LCD_WriteRAM_Prepare();     			//开始写入GRAM	  
+			for(j=0;j<xlen;j++)LCD_WRITE_DATA(color);	//显示颜色 	    
+		}
+	}	 
+} 
 //在指定位置显示一个字符
 //x,y:起始坐标
 //num:要显示的字符:" "--->"~"

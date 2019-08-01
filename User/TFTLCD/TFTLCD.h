@@ -22,4 +22,10 @@ typedef struct
 
 
 extern _TFTLCD LCD;
+
+void LCD_WRITE_DATA(uint16_t data);
+void LCD_WRITE_REG(uint16_t data);
+void LCD_Fast_DrawPoint(uint16_t x,uint16_t y,uint16_t color);
+uint16_t LCD_ReadPoint(uint16_t x,uint16_t y);
+void LCD_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint16_t color);
 #endif

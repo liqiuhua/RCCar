@@ -56,14 +56,14 @@ Purpose     : This file provides emWin Interface with FreeRTOS
 #include "GUI.h"
     
     /* FreeRTOS include files */
-#include "cmsis_os.h"
-    
+#include "FreeRTOS_os.h"
+   
 /*********************************************************************
 *
 * Global data
 */
-static osMutexId osMutex;
-static osSemaphoreId osSemaphore;
+static SemaphoreHandle_t osMutex;
+static SemaphoreHandle_t osSemaphore;
 /*********************************************************************
 *
 * Timing:
