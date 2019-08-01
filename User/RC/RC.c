@@ -39,6 +39,8 @@ void vRCStart(void *pvParameters)
 #include "KEY.h"
 #include "TFTLCD.h"
 #include "string.h"
+static uint16_t PWMOUTDATA=5000;
+static uint8_t UP_DOWN_FLAG=1;
 void vInteractionStart(void *pvParameters)
 {
 
@@ -70,35 +72,49 @@ void vInteractionStart(void *pvParameters)
             LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_TWO,getTIM3ICValue(1));
             LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_THREE,getTIM3ICValue(2));
             LCDPWM_INFO_LINE_DISPLAY(PWMINPUT_FOUR,getTIM3ICValue(3));
+            LCDPWM_INFO_LINE_DISPLAY(PWMOUT_ONE,getTIM4PWMValue(3));
+            LCDPWM_INFO_LINE_DISPLAY(PWMOUT_TWO,getTIM4PWMValue(4));
         }
+        if(UP_DOWN_FLAG)
+        {
 
+            PWM_out(0x04,0);
+            PWM_out(0x03,PWMOUTDATA);
+        }
+        else
+        {
+            
+           PWM_out(0x03,0);
+           PWM_out(0x04,(PWMOUTDATA)); 
+        }
 
     }
     
 }
-static uint16_t PWMOUTDATA=5000;
 static void KEYDeal(uint8_t KeyValue)
 {
     uint8_t Display[30]={0}; 
     if(KeyValue&KEY_UP_CLICK)
     {
-        PWM_out(0xff,(PWMOUTDATA+=100));
+
+        UP_DOWN_FLAG=1;
         snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_UP_CLICK",PWMOUTDATA);
 
     }
     if(KeyValue&KEY_DOWN_CLICK)
     {
-        PWM_out(0xff,(PWMOUTDATA-=100));
+        
+        UP_DOWN_FLAG=0;
          snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_DOWN_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_LEFT_CLICK)
     {
-        PWM_out(0xff,(PWMOUTDATA+=500));
+        PWMOUTDATA+=500;
          snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_LEFT_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_RIGHT_CLICK)
     {
-        PWM_out(0xff,(PWMOUTDATA-=500));
+        PWMOUTDATA-=500;
         snprintf((char *)Display,30,"%s %d",(uint8_t *)"KEY_RIGHT_CLICK",PWMOUTDATA);
     }
     if(KeyValue&KEY_ENTER_CLICK)
@@ -127,7 +143,6 @@ static void LCDPWM_INFO_LINE_DISPLAY(uint8_t line, uint32_t value)
         case (LCD_PWM_INFO_START_LINE+0):
             
             snprintf((char *)Display,30,"PWM1_Out= %d",value);
-
             LCD_ShowStringLine((LCD_PWM_INFO_START_LINE+0),0,Display);
         break;
         
@@ -184,6 +199,6 @@ static void LCDPWM_INFODISPLAY(void)
 }
 static void LCD_ShowStringLine(uint16_t row,uint16_t column,uint8_t *p)
 {        
-        GUI_DispStringAt("                                    ",5+8*column,5+16*row);
+        GUI_DispStringAt("                                                       ",5+8*column,5+16*row);
         GUI_DispStringAt((const char *)p,5+8*column,5+16*row);
 }

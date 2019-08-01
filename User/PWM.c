@@ -255,5 +255,23 @@ uint32_t getTIM3ICValue(uint8_t channel)
         
     return TIM3_IC_Value[channel];
 }
-
+uint32_t getTIM4PWMValue(uint8_t channel)
+{
+    if(channel>4)
+        return 0;
+    switch(channel)
+    {
+        case 1:
+            return TIM4->CCR1;
+        case 2:
+            return TIM4->CCR2;
+        case 3:
+            return TIM4->CCR3;
+        case 4:
+            return TIM4->CCR4;
+        default:
+            break;
+        
+    }
+}
 
