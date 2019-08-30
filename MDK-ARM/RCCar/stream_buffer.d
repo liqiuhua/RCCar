@@ -1,8 +1,8 @@
 .\rccar\stream_buffer.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\stream_buffer.c
-.\rccar\stream_buffer.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-.\rccar\stream_buffer.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\rccar\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\rccar\stream_buffer.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\stream_buffer.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\rccar\stream_buffer.o: ..\User\FreeRTOSConfig.h
 .\rccar\stream_buffer.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\stream_buffer.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h

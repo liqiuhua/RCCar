@@ -1,7 +1,7 @@
 .\rccar\port.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c
 .\rccar\port.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\port.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-.\rccar\port.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\port.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\port.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\port.o: ..\User\FreeRTOSConfig.h
 .\rccar\port.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\port.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h

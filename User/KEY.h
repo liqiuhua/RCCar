@@ -20,5 +20,6 @@
 
 void KEY_Init(void);
 uint8_t getKeyStatus(void);
+
 #endif
 

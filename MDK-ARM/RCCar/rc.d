@@ -1,8 +1,8 @@
 .\rccar\rc.o: ..\User\RC\RC.c
 .\rccar\rc.o: ..\User\RC\RC.h
 .\rccar\rc.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\rc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-.\rccar\rc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\rc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\rc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\rc.o: ..\User\FreeRTOSConfig.h
 .\rccar\rc.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\rc.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h
@@ -51,7 +51,7 @@
 .\rccar\rc.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h
 .\rccar\rc.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\rccar\rc.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
-.\rccar\rc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\rccar\rc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI.h
 .\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI_ConfDefaults.h
 .\rccar\rc.o: ..\Drivers\STemWinLibrary532\Config\GUIConf.h
@@ -61,4 +61,4 @@
 .\rccar\rc.o: ..\Drivers\STemWinLibrary532\inc\GUI_Version.h
 .\rccar\rc.o: ..\User\KEY.h
 .\rccar\rc.o: ..\User\TFTLCD\TFTLCD.h
-.\rccar\rc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\rccar\rc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

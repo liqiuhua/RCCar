@@ -2,7 +2,7 @@
 .\rccar\misc.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\rccar\misc.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\rccar\misc.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\rccar\misc.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\misc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\misc.o: ../Drivers/CMSIS/Include/cmsis_version.h
 .\rccar\misc.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 .\rccar\misc.o: ../Drivers/CMSIS/Include/cmsis_armcc.h

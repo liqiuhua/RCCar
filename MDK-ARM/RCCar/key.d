@@ -1,6 +1,6 @@
 .\rccar\key.o: ..\User\KEY.c
 .\rccar\key.o: ..\User\KEY.h
-.\rccar\key.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\key.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\key.o: ..\User\ExceptionHandler.h
 .\rccar\key.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\rccar\key.o: ../Drivers/CMSIS/Include/core_cm4.h
@@ -38,7 +38,7 @@
 .\rccar\key.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\rccar\key.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\rccar\key.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\key.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\key.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\rccar\key.o: ..\User\FreeRTOSConfig.h
 .\rccar\key.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\key.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h

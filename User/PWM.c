@@ -96,7 +96,7 @@ void PWM_OUTPUT_Init(void)
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_Init(GPIOD, &GPIO_InitStruct);
     
-    TIM_TimeBaseStructure.TIM_Prescaler=83;//13;
+    TIM_TimeBaseStructure.TIM_Prescaler=20;//13;
     TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //向上计数模式
     TIM_TimeBaseStructure.TIM_Period =40000;
     TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
@@ -273,5 +273,6 @@ uint32_t getTIM4PWMValue(uint8_t channel)
             break;
         
     }
+		return 0;
 }
 

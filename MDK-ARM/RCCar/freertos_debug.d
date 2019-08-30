@@ -1,8 +1,8 @@
 .\rccar\freertos_debug.o: ..\User\FreeRTOS_Debug\FreeRTOS_Debug.c
 .\rccar\freertos_debug.o: ..\User\FreeRTOS_Debug\FreeRTOS_Debug.h
 .\rccar\freertos_debug.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\freertos_debug.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-.\rccar\freertos_debug.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\freertos_debug.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\freertos_debug.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\freertos_debug.o: ..\User\FreeRTOSConfig.h
 .\rccar\freertos_debug.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\freertos_debug.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h
@@ -50,4 +50,4 @@
 .\rccar\freertos_debug.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\rccar\freertos_debug.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\rccar\freertos_debug.o: ..\User\ExceptionHandler.h
-.\rccar\freertos_debug.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\rccar\freertos_debug.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

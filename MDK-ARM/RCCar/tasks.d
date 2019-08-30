@@ -1,9 +1,9 @@
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\tasks.c
-.\rccar\tasks.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\rccar\tasks.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\rccar\tasks.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\rccar\tasks.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\tasks.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-.\rccar\tasks.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\tasks.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\tasks.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\tasks.o: ..\User\FreeRTOSConfig.h
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h
@@ -14,4 +14,4 @@
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\list.h
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\timers.h
 .\rccar\tasks.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\stack_macros.h
-.\rccar\tasks.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\rccar\tasks.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

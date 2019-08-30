@@ -1,8 +1,8 @@
 .\rccar\event_groups.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\event_groups.c
-.\rccar\event_groups.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\rccar\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\rccar\event_groups.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\event_groups.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-.\rccar\event_groups.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\event_groups.o: ..\User\FreeRTOSConfig.h
 .\rccar\event_groups.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\event_groups.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h

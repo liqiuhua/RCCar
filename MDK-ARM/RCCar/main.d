@@ -2,7 +2,7 @@
 .\rccar\main.o: ../Core/Inc/main.h
 .\rccar\main.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\rccar\main.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\rccar\main.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\main.o: ../Drivers/CMSIS/Include/cmsis_version.h
 .\rccar\main.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 .\rccar\main.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -36,10 +36,10 @@
 .\rccar\main.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h
 .\rccar\main.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\rccar\main.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
-.\rccar\main.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\rccar\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\rccar\main.o: ..\User\ExceptionHandler.h
 .\rccar\main.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\main.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\rccar\main.o: ..\User\FreeRTOSConfig.h
 .\rccar\main.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\main.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h

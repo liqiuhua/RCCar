@@ -7,8 +7,8 @@
 .\rccar\gui_x_freertos.o: ..\Drivers\STemWinLibrary532\inc\Global.h
 .\rccar\gui_x_freertos.o: ..\Drivers\STemWinLibrary532\inc\GUI_Version.h
 .\rccar\gui_x_freertos.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\gui_x_freertos.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-.\rccar\gui_x_freertos.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\gui_x_freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\gui_x_freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\gui_x_freertos.o: ..\User\FreeRTOSConfig.h
 .\rccar\gui_x_freertos.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\gui_x_freertos.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h

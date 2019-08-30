@@ -1,6 +1,6 @@
 .\rccar\tftlcd.o: ..\User\TFTLCD\TFTLCD.c
 .\rccar\tftlcd.o: ..\User\TFTLCD\TFTLCD.h
-.\rccar\tftlcd.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\rccar\tftlcd.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\rccar\tftlcd.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\rccar\tftlcd.o: ../Drivers/CMSIS/Include/core_cm4.h
 .\rccar\tftlcd.o: ../Drivers/CMSIS/Include/cmsis_version.h
@@ -36,10 +36,10 @@
 .\rccar\tftlcd.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h
 .\rccar\tftlcd.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\rccar\tftlcd.o: ..\Drivers\STM32F4xx_StdPeriph_Driver\inc\misc.h
-.\rccar\tftlcd.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\rccar\tftlcd.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\rccar\tftlcd.o: ..\User\TFTLCD\FONT.H
 .\rccar\tftlcd.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\FreeRTOS.h
-.\rccar\tftlcd.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\rccar\tftlcd.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\rccar\tftlcd.o: ..\User\FreeRTOSConfig.h
 .\rccar\tftlcd.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\projdefs.h
 .\rccar\tftlcd.o: ..\FreeRTOSv10.2.1\FreeRTOS\Source\include\portable.h
